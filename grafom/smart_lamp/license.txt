@@ -1,0 +1,11 @@
+Model Information:
+* title:	Smart Lamp
+* source:	https://sketchfab.com/3d-models/smart-lamp-b81958f85ca74aed8852916429719b74
+* author:	fchaolshi (https://sketchfab.com/fchaolshi)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Smart Lamp" (https://sketchfab.com/3d-models/smart-lamp-b81958f85ca74aed8852916429719b74) by fchaolshi (https://sketchfab.com/fchaolshi) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

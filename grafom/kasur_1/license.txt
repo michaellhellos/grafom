@@ -1,0 +1,11 @@
+Model Information:
+* title:	Kasur 1
+* source:	https://sketchfab.com/3d-models/kasur-1-01010bc131eb4727b65fef204888526b
+* author:	ajinuho (https://sketchfab.com/ajinuho)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Kasur 1" (https://sketchfab.com/3d-models/kasur-1-01010bc131eb4727b65fef204888526b) by ajinuho (https://sketchfab.com/ajinuho) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
