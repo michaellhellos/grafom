@@ -31,6 +31,7 @@ function init() {
   createButtons();
   loadChairGLTF();
   loadBedGLTF();
+  loadBabyLolaGLTF();
   loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
   animate();
 }
@@ -254,6 +255,28 @@ function loadLampGLTF() {
       lampModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
       scene.add(lampModel);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened', error);
+    }
+  );
+}
+function loadBabyLolaGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './baby_yoda_free_3d_by_oscar_creativo/scene.gltf', // Path to your GLTF Baby Lola file
+    (gltf) => {
+      const babyLolaModel = gltf.scene;
+      babyLolaModel.position.set(0, 0.6, -4.5); // Adjust the position to place it on the table
+
+      // Adjust the scale if necessary
+      const scaleFactor = 0.5; // Desired scale factor
+      babyLolaModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      scene.add(babyLolaModel);
     },
     (xhr) => {
       console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
