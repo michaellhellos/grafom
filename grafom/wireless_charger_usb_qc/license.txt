@@ -1,0 +1,11 @@
+Model Information:
+* title:	Wireless Charger USB QC
+* source:	https://sketchfab.com/3d-models/wireless-charger-usb-qc-67677c93e39e4e37ad411c235a3f58e9
+* author:	MD.Jobair Hossain (https://sketchfab.com/samrat33k)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Wireless Charger USB QC" (https://sketchfab.com/3d-models/wireless-charger-usb-qc-67677c93e39e4e37ad411c235a3f58e9) by MD.Jobair Hossain (https://sketchfab.com/samrat33k) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

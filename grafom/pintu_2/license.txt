@@ -1,0 +1,11 @@
+Model Information:
+* title:	Pintu (2)
+* source:	https://sketchfab.com/3d-models/pintu-2-0cd7d0d6ec5e4ea3a54a597b237a0349
+* author:	Elizabeth Cahya (https://sketchfab.com/ElizabethCahya)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Pintu (2)" (https://sketchfab.com/3d-models/pintu-2-0cd7d0d6ec5e4ea3a54a597b237a0349) by Elizabeth Cahya (https://sketchfab.com/ElizabethCahya) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
