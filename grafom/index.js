@@ -225,11 +225,13 @@ function loadBedGLTF() {
     './kasur_1/scene.gltf', // Path ke file GLTF kasur
     (gltf) => {
       const bedModel = gltf.scene;
-      bedModel.position.set(3, 0.1, 2); // Sesuaikan posisi sesuai kebutuhan
+      bedModel.position.set(3, 0, 3.5); // Sesuaikan posisi sesuai kebutuhan
       
-      // Putar posisi kasur (dalam radian)
-      // Misalnya, untuk memutar 90 derajat di sumbu Y:
-      bedModel.rotation.y = Math.PI / 30; // Putar 90 derajat
+      // Perbesar kasur 2x
+      bedModel.scale.set(2, 2, 2);
+
+      // Putar posisi kasur 90 derajat dari posisi sekarang
+      bedModel.rotation.y += Math.PI / 1; // Tambahkan 90 derajat
 
       scene.add(bedModel);
     },
@@ -241,6 +243,8 @@ function loadBedGLTF() {
     }
   );
 }
+
+
 
 function loadLampGLTF() {
   const loader = new GLTFLoader();
