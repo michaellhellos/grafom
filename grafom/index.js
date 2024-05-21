@@ -31,12 +31,13 @@ function init() {
   createButtons();
   loadChairGLTF();
   loadBedGLTF();
+  loadDrawerGLTF();
   loadBabyLolaGLTF();
   loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
   loadACGLTF();
   loadTableGLTF(); 
   loadMonitorGLTF();
-  loadWirelessChargerGLTF()
+  loadWirelessChargerGLTF();
   animate();
 }
 
@@ -132,6 +133,7 @@ function createSceneObjects() {
 
   const laptopTopGeometry = new THREE.BoxGeometry(0.8, 0.02, 0.5);
   laptopTop = new THREE.Mesh(laptopTopGeometry, laptopMaterial);
+  laptopMixer = new THREE.AnimationMixer(laptopTop);
   // laptopTop.position.set(0, 0.58, -4.75);
   // scene.add(laptopTop);
 
@@ -147,14 +149,15 @@ function createSceneObjects() {
     { time: 1, value: 0 }
   ];
 
-  const laptopOpenTrack = new THREE.NumberKeyframeTrack('.rotation[x]', openLaptopKeyframes.map(kf => kf.time), openLaptopKeyframes.map(kf => kf.value));
-  const laptopCloseTrack = new THREE.NumberKeyframeTrack('.rotation[x]', closeLaptopKeyframes.map(kf => kf.time), closeLaptopKeyframes.map(kf => kf.value));
+  const openLaptopTrack = new THREE.NumberKeyframeTrack('.rotation[x]', openLaptopKeyframes.map(kf => kf.time), openLaptopKeyframes.map(kf => kf.value));
+  const closeLaptopTrack = new THREE.NumberKeyframeTrack('.rotation[x]', closeLaptopKeyframes.map(kf => kf.time), closeLaptopKeyframes.map(kf => kf.value));
 
-  const openLaptopClip = new THREE.AnimationClip('openLaptop', 1, [laptopOpenTrack]);
-  const closeLaptopClip = new THREE.AnimationClip('closeLaptop', 1, [laptopCloseTrack]);
+  const openLaptopClip = new THREE.AnimationClip('openLaptop', 1, [openLaptopTrack]);
+  const closeLaptopClip = new THREE.AnimationClip('closeLaptop', 1, [closeLaptopTrack]);
 
   laptopOpenAction = laptopMixer.clipAction(openLaptopClip);
   laptopCloseAction = laptopMixer.clipAction(closeLaptopClip);
+
 //lemari
   const wardrobeGeometry = new THREE.BoxGeometry(2, 4, 1.5);
   const wardrobeMaterial = new THREE.MeshBasicMaterial({ map: woodTexture });
@@ -448,20 +451,22 @@ function createButtons() {
   laptopButton.style.top = '70px';
   laptopButton.style.left = '10px';
   document.body.appendChild(laptopButton);
-  laptopButton.addEventListener('click', () => {
-    if (laptopState === 'closed') {
-      laptopOpenAction.play();
-      laptopCloseAction.stop();
-      laptopState = 'open';
-      laptopButton.textContent = 'Close Laptop';
-    } else if (laptopState === 'open') {
-      laptopCloseAction.play();
-      laptopOpenAction.stop();
-      laptopState = 'closed';
-      laptopButton.textContent = 'Open Laptop';
-    }
-  });
+  laptopButton.addEventListener('click', toggleLaptop);
+
 }
+
+function toggleLaptop() {
+  if (laptopState === 'closed') {
+    laptopOpenAction.play();
+    laptopCloseAction.stop();
+    laptopState = 'open';
+  } else if (laptopState === 'open') {
+    laptopCloseAction.play();
+    laptopOpenAction.stop();
+    laptopState = 'closed';
+  }
+}
+
 
 function animate() {
   requestAnimationFrame(animate);
@@ -473,6 +478,7 @@ function animate() {
   controls.update();
   renderer.render(scene, camera);
 }
+
 
 function onKeyDown(event) {
   const speed = 0.1;
@@ -504,5 +510,30 @@ function onKeyDown(event) {
     console.log("Collision detected! Movement canceled.");
   }
 }
+function loadDrawerGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './', // Ganti dengan lokasi file GLTF laci Anda
+    (gltf) => {
+      const drawerModel = gltf.scene;
+
+      // Sesuaikan posisi laci sesuai kebutuhan Anda
+      drawerModel.position.set(-0.5, 0, 4); 
+
+      // Mengatur skala model jika diperlukan
+      const scaleFactor = 1; // Faktor skala yang diinginkan
+      drawerModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      scene.add(drawerModel);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened', error);
+    }
+  );
+}
+
 
 init();
