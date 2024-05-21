@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
+
 let camera, renderer, controls, clock;
 const scene = new THREE.Scene();
 let door, doorMixer, doorOpenAction, doorCloseAction, doorState = 'closed';
@@ -10,7 +11,8 @@ let laptopTop;
 
 function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 2, 10);
+  camera.position.set(0, 3, 10);
+
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -27,11 +29,12 @@ function init() {
   createSceneObjects();
 
   document.addEventListener('keydown', onKeyDown);
-
   createButtons();
   loadChairGLTF();
   loadBedGLTF();
   loadDrawerGLTF();
+  loadDoorGLTF();
+  createWallNextToDoor();
   loadBabyLolaGLTF();
   loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
   loadACGLTF();
@@ -510,6 +513,7 @@ function onKeyDown(event) {
     console.log("Collision detected! Movement canceled.");
   }
 }
+
 function loadDrawerGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -538,7 +542,80 @@ function loadDrawerGLTF() {
   );
 }
 
+function loadDoorGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './pintu/scene.gltf', // Ganti dengan lokasi file GLTF pintu Anda
+    (gltf) => {
+      const doorModel = gltf.scene;
+
+      // Sesuaikan posisi pintu sesuai kebutuhan Anda
+      doorModel.position.set(-4.95, 0, 1); 
+
+      // Memutar pintu sebesar 90 derajat dari posisi saat ini
+      const rotationAngle = Math.PI / 2; // Konversi 90 derajat ke radian
+      doorModel.rotation.y += rotationAngle;
+
+      // Mengatur skala model jika diperlukan
+      const scaleFactor = 0.003; // Faktor skala yang diinginkan
+      doorModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      scene.add(doorModel);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened', error);
+    }
+  );
+}
+
+function createWallNextToDoor() {
+  const doorWidth = 2; // Lebar pintu GLTF
+  const doorHeight = 4; // Tinggi pintu GLTF
+  const doorDepth = 0.3; // Ketebalan pintu GLTF
+  const wallWidth = 0.1; // Ketebalan tembok
+  const wallHeight = 5; // Tinggi tembok
+  const wallDepth = 10; // Kedalaman tembok
+
+  // Hitung posisi lubang pada tembok
+  const holePositionX = -3.5 + (doorWidth / 2) + (wallWidth / 2);
+  const holePositionY = 2;
+  const holePositionZ = -5;
+
+  // Buat geometri lubang
+  const holeGeometry = new THREE.BoxGeometry(doorWidth, doorHeight, doorDepth);
+
+  // Posisi lubang
+  holeGeometry.translate(holePositionX, holePositionY, holePositionZ);
+
+  // Rotasi lubang
+  holeGeometry.rotateY(Math.PI / 2); // Putar posisi lubang sebesar 90 derajat
+
+  // Buat bahan untuk lubang
+  const holeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Gunakan warna hitam untuk lubang
+
+  // Buat mesh lubang
+  const holeMesh = new THREE.Mesh(holeGeometry, holeMaterial);
+
+  // Gabungkan lubang dengan tembok
+  scene.add(holeMesh);
+
+  // Buat tembok
+  const wallGeometry = new THREE.BoxGeometry(wallWidth, wallHeight, wallDepth);
+  const wallTexture = new THREE.TextureLoader().load('wallpaper.jpeg');
+  const wallMaterial = new THREE.MeshBasicMaterial({ map: wallTexture });
+
+  const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+
+  // Sesuaikan posisi tembok agar berdekatan dengan pintu
+  wall.position.set(-5 + wallWidth / 2, wallHeight / 2, 0); // Sesuaikan posisi agar tembok berada di sebelah pintu
+
+  scene.add(wall);
+}
 
 
 
 init();
+
