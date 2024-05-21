@@ -159,10 +159,10 @@ function createSceneObjects() {
   laptopCloseAction = laptopMixer.clipAction(closeLaptopClip);
 
 //lemari
-  const wardrobeGeometry = new THREE.BoxGeometry(2, 4, 1.5);
+  const wardrobeGeometry = new THREE.BoxGeometry(3, 4, 1.5);
   const wardrobeMaterial = new THREE.MeshBasicMaterial({ map: woodTexture });
   const wardrobe = new THREE.Mesh(wardrobeGeometry, wardrobeMaterial);
-  wardrobe.position.set(4.5, 2, -4); // Ubah posisi untuk menempatkannya di pojok kanan belakang
+  wardrobe.position.set(4, 2, -3.5); // Ubah posisi untuk menempatkannya di pojok kanan belakang
   wardrobe.rotation.y = -Math.PI / 2; // Putar lemari agar menghadap ke dalam ruangan
   scene.add(wardrobe);
   
@@ -232,7 +232,7 @@ function loadBedGLTF() {
     './kasur_1/scene.gltf', // Path ke file GLTF kasur
     (gltf) => {
       const bedModel = gltf.scene;
-      bedModel.position.set(3, 0, 3.5); // Sesuaikan posisi sesuai kebutuhan
+      bedModel.position.set(2, 0, 3.5); // Sesuaikan posisi sesuai kebutuhan
       
       // Perbesar kasur 2x
       bedModel.scale.set(2, 2, 2);
@@ -513,12 +513,15 @@ function onKeyDown(event) {
 function loadDrawerGLTF() {
   const loader = new GLTFLoader();
   loader.load(
-    './', // Ganti dengan lokasi file GLTF laci Anda
+    './drawer/scene.gltf', // Ganti dengan lokasi file GLTF laci Anda
     (gltf) => {
       const drawerModel = gltf.scene;
 
       // Sesuaikan posisi laci sesuai kebutuhan Anda
-      drawerModel.position.set(-0.5, 0, 4); 
+      drawerModel.position.set(-1, 0, 4); 
+
+      // Rotasi 180 derajat dari posisi semula
+      drawerModel.rotation.y += Math.PI;
 
       // Mengatur skala model jika diperlukan
       const scaleFactor = 1; // Faktor skala yang diinginkan
@@ -534,6 +537,8 @@ function loadDrawerGLTF() {
     }
   );
 }
+
+
 
 
 init();
