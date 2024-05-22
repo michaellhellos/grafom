@@ -11,8 +11,7 @@ let laptopTop;
 
 function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 3, 10);
-
+  camera.position.set(-2.7, 3.2, 5);
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -41,6 +40,7 @@ function init() {
   loadTableGLTF(); 
   loadMonitorGLTF();
   loadWirelessChargerGLTF();
+  loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
   animate();
 }
 
@@ -346,6 +346,29 @@ function loadTableGLTF() {
     }
   );
 }
+function loadMouseGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './mouse/scene.gltf', // Path ke file GLTF mouse Anda
+    (gltf) => {
+      const mouseModel = gltf.scene;
+      mouseModel.position.set(-0.5, 1.7, -3.7); // Sesuaikan posisi mouse sesuai kebutuhan Anda
+
+      // Mengatur skala model jika diperlukan
+      const scaleFactor = 0.1; // Faktor skala yang diinginkan
+      mouseModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      // Tambahkan model mouse ke dalam scene
+      scene.add(mouseModel);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened while loading the GLTF model', error);
+    }
+  );
+}
 
 function addScaleControls(model) {
   const scaleInput = document.createElement('input');
@@ -481,7 +504,6 @@ function animate() {
   controls.update();
   renderer.render(scene, camera);
 }
-
 
 function onKeyDown(event) {
   const speed = 0.1;

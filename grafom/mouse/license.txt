@@ -1,0 +1,11 @@
+Model Information:
+* title:	Mouse Logitech G203
+* source:	https://sketchfab.com/3d-models/mouse-logitech-g203-6b70ace291c44735bed3309b05f44bba
+* author:	JorgeAlfredOwO (https://sketchfab.com/JorgeAlfredOwO)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Mouse Logitech G203" (https://sketchfab.com/3d-models/mouse-logitech-g203-6b70ace291c44735bed3309b05f44bba) by JorgeAlfredOwO (https://sketchfab.com/JorgeAlfredOwO) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
