@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lemari Baju
+* source:	https://sketchfab.com/3d-models/lemari-baju-f1978fa3192d499db7233e900f43acdf
+* author:	Gabriabel (https://sketchfab.com/Gabriabel)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lemari Baju" (https://sketchfab.com/3d-models/lemari-baju-f1978fa3192d499db7233e900f43acdf) by Gabriabel (https://sketchfab.com/Gabriabel) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

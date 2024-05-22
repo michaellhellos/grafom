@@ -41,6 +41,7 @@ function init() {
   loadMonitorGLTF();
   loadWirelessChargerGLTF();
   loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
+  loadWardrobeGLTF();
   animate();
 }
 
@@ -167,7 +168,7 @@ function createSceneObjects() {
   const wardrobe = new THREE.Mesh(wardrobeGeometry, wardrobeMaterial);
   wardrobe.position.set(4, 2, -3.5); // Ubah posisi untuk menempatkannya di pojok kanan belakang
   wardrobe.rotation.y = -Math.PI / 2; // Putar lemari agar menghadap ke dalam ruangan
-  scene.add(wardrobe);
+  // scene.add(wardrobe);
   
   const lampGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 32);
   const lampMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
@@ -589,6 +590,31 @@ function loadDoorGLTF() {
     },
     (error) => {
       console.error('An error happened', error);
+    }
+  );
+}
+function loadWardrobeGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './lemari_baju/scene.gltf', // Ganti dengan lokasi file GLTF lemari Anda
+    (gltf) => {
+      const wardrobeModel = gltf.scene;
+
+      // Sesuaikan posisi lemari sesuai kebutuhan Anda
+      wardrobeModel.position.set(3.6, 0, -4.4); // Contoh posisi di pojok kanan belakang ruangan
+
+      // Mengatur skala model jika diperlukan
+      const scaleFactor = 0.8; // Faktor skala yang diinginkan, sesuaikan jika perlu
+      wardrobeModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      // Tambahkan model lemari ke dalam scene
+      scene.add(wardrobeModel);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened while loading the GLTF model', error);
     }
   );
 }
