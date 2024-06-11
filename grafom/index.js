@@ -8,10 +8,21 @@ const scene = new THREE.Scene();
 let door, doorMixer, doorOpenAction, doorCloseAction, doorState = 'closed';
 let laptopMixer, laptopOpenAction, laptopCloseAction, laptopState = 'closed';
 let laptopTop;
+let VacumModel;
+let isRotatedLeft = false; // Menandai apakah rotasi ke kiri telah dilakukan
+let isRotatedRight = false; // Menandai apakah rotasi ke kanan telah dilakukan
+let isRotatedForward = false; // Menandai apakah rotasi ke depan telah dilakukan
+let isRotatedBackward = false; // Menandai apakah rotasi ke belakang telah dilakukan
+let isRotatedBottom = false; // Menandai apakah rotasi ke bawah telah dilakukan
+
+
 
 function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(-2.7, 3.2, 5);
+
+  
+
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -27,7 +38,37 @@ function init() {
 
   createSceneObjects();
 
-  document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('keydown', (event) => {
+    onKeyDown(event);
+  
+    // Handle rotation when 'a' is pressed
+    if (event.key === 'a') {
+      rotateLeft();
+    }
+  
+    // Handle rotation when 'd' is pressed
+    if (event.key === 'd') {
+      rotateRight();
+    }
+  
+    // Handle rotation when 'w' is pressed
+    if (event.key === 'w') {
+      rotateForward();
+    }
+  
+    // Handle rotation when 's' is pressed
+    if (event.key === 's') {
+      rotateBackward();
+    }
+  
+    // Handle rotation when 'x' is pressed
+    if (event.key === 'x') {
+      rotateBottom();
+    }
+  });
+  
+  
+  
   createButtons();
   loadChairGLTF();
   loadBedGLTF();
@@ -39,6 +80,8 @@ function init() {
   loadACGLTF();
   loadTableGLTF(); 
   loadMonitorGLTF();
+  loadLampuGLTF();
+  loadVacumGLTF()
   loadWirelessChargerGLTF();
   loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
   loadWardrobeGLTF();
@@ -179,17 +222,50 @@ function createSceneObjects() {
   loadGLTF();
 }
 
+function loadLampuGLTF(){
+  const loader = new GLTFLoader();
+  loader.load(
+    './lamp/scene.gltf',
+    (gltf) => {
+      const LampModel = gltf.scene;
+      LampModel.position.set(0, 3.74, 0);
+
+      const scaleFactor = 2; // Faktor skala yang diinginkan
+      LampModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      scene.add(LampModel)
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Warna putih, intensitas 1
+      directionalLight.position.set(1, 1, 1); // Atur posisi arah cahaya
+      scene.add(directionalLight);
+
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened', error);
+    }
+  )
+}
+
 function loadGLTF() {
   const loader = new GLTFLoader();
   loader.load(
-    './laptop/scene.gltf', // Ganti dengan lokasi file GLTF laptop Anda
+    './laptop/scene.gltf',
     (gltf) => {
       const laptopModel = gltf.scene;
-      laptopModel.position.set(-1.5, 1.7, -3.7); // Sesuaikan posisi laptop sesuai kebutuhan Anda
+      laptopModel.position.set(-1.5, 1.7, -3.7);
 
-      // Mengatur skala model
-      const scaleFactor = 0.5; // Faktor skala yang diinginkan
+      const scaleFactor = 0.5;
       laptopModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      // Traverse through all meshes in the model and set receiveShadow and castShadow properties
+      laptopModel.traverse((child) => {
+        if (child.isMesh) {
+          child.receiveShadow = true;
+          child.castShadow = true;
+        }
+      });
 
       scene.add(laptopModel);
     },
@@ -201,6 +277,8 @@ function loadGLTF() {
     }
   );
 }
+
+
 
 function loadChairGLTF() {
   const loader = new GLTFLoader();
@@ -219,6 +297,10 @@ function loadChairGLTF() {
       const scaleFactor = 0.06; // Faktor skala yang diinginkan (sebelumnya 0.5, sekarang 0.25)
       chairModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
+      // Tambahkan properti receiveShadow dan castShadow
+      chairModel.receiveShadow = true; // Menerima bayangan
+      chairModel.castShadow = true; // Melemparkan bayangan
+
       scene.add(chairModel);
     },
     (xhr) => {
@@ -229,6 +311,7 @@ function loadChairGLTF() {
     }
   );
 }
+
 
 function loadBedGLTF() {
   const loader = new GLTFLoader();
@@ -260,14 +343,21 @@ function loadBedGLTF() {
 function loadLampGLTF() {
   const loader = new GLTFLoader();
   loader.load(
-    './smart_lamp/scene.gltf', // Path to your GLTF lamp file
+    './smart_lamp/scene.gltf',
     (gltf) => {
       const lampModel = gltf.scene;
-      lampModel.position.set(-2.7, 1.7, -4.1); // Adjust the position to be on the table and beside the laptop
+      lampModel.position.set(-2.7, 1.7, -4.1);
 
-      // Adjust the scale if necessary
-      const scaleFactor = 0.5; // Desired scale factor
+      const scaleFactor = 0.5;
       lampModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      // Tambahkan properti receiveShadow dan castShadow
+      lampModel.traverse((child) => {
+        if (child.isMesh) {
+          child.receiveShadow = true;
+          child.castShadow = true;
+        }
+      });
 
       scene.add(lampModel);
     },
@@ -279,6 +369,8 @@ function loadLampGLTF() {
     }
   );
 }
+
+
 function loadBabyLolaGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -301,6 +393,7 @@ function loadBabyLolaGLTF() {
     }
   );
 }
+
 function loadACGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -323,6 +416,7 @@ function loadACGLTF() {
     }
   );
 }
+
 function loadTableGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -347,6 +441,7 @@ function loadTableGLTF() {
     }
   );
 }
+
 function loadMouseGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -359,6 +454,10 @@ function loadMouseGLTF() {
       const scaleFactor = 0.1; // Faktor skala yang diinginkan
       mouseModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
+      // Tambahkan properti receiveShadow dan castShadow
+      mouseModel.receiveShadow = true; // Menerima bayangan
+      mouseModel.castShadow = true; // Melemparkan bayangan
+
       // Tambahkan model mouse ke dalam scene
       scene.add(mouseModel);
     },
@@ -370,6 +469,7 @@ function loadMouseGLTF() {
     }
   );
 }
+
 
 function addScaleControls(model) {
   const scaleInput = document.createElement('input');
@@ -418,6 +518,7 @@ function loadMonitorGLTF() {
     }
   );
 }
+
 function loadWirelessChargerGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -507,35 +608,108 @@ function animate() {
 }
 
 function onKeyDown(event) {
-  const speed = 0.1;
-  const newPosition = camera.position.clone();
+  const speed = 0.1; // Kecepatan gerak vakum
+  const newPosition = VacumModel.position.clone(); // Dapatkan posisi vakum saat ini
 
+  // Setel status rotasi ke false untuk memungkinkan rotasi kembali saat arah pergerakan diubah
+  isRotatedLeft = false;
+  isRotatedRight = false;
+  isRotatedForward = false;
+  isRotatedBackward = false;
+  isRotatedBottom = false;
+
+  // Tentukan arah pergerakan berdasarkan tombol yang ditekan
   switch (event.key) {
-    case 'w':
-      newPosition.z -= speed; // Maju
+    case 'w': // Tombol 'w' untuk maju
+      newPosition.z -= speed;
+      rotateForward(); // Panggil fungsi rotasi ke depan
       break;
-    case 's':
-      newPosition.z += speed; // Mundur
+    case 'a': // Tombol 'a' untuk kekiri
+      newPosition.x -= speed;
+      rotateLeft(); // Panggil fungsi rotasi ke kiri
       break;
-    case 'a':
-      newPosition.x -= speed; // Gerak kiri
+    case 's': // Tombol 's' untuk mundur
+      newPosition.z += speed;
+      rotateBackward(); // Panggil fungsi rotasi ke belakang
       break;
-    case 'd':
-      newPosition.x += speed; // Gerak kanan
+    case 'd': // Tombol 'd' untuk kekanan
+      newPosition.x += speed;
+      rotateRight(); // Panggil fungsi rotasi ke kanan
       break;
     default:
-      break;
+      return; // Keluar dari fungsi jika tombol yang ditekan tidak relevan
   }
 
-  const raycaster = new THREE.Raycaster(newPosition, camera.getWorldDirection(), 0, 1);
-  const intersects = raycaster.intersectObjects(scene.children.filter(child => child instanceof THREE.Mesh));
+  // Update posisi vakum
+  VacumModel.position.copy(newPosition);
 
-  if (intersects.length === 0) {
-    camera.position.copy(newPosition);
-  } else {
-    console.log("Collision detected! Movement canceled.");
+  // Lakukan operasi lain yang mungkin Anda butuhkan setelah memperbarui posisi vakum
+}
+
+
+function rotateLeft() {
+  if (!isRotatedLeft) {
+    VacumModel.rotation.y = -Math.PI / 2; // Atur rotasi menjadi menghadap ke kiri
+    isRotatedLeft = true; // Setel ke true agar rotasi hanya terjadi sekali
   }
 }
+
+function rotateRight() {
+  if (!isRotatedRight) {
+    VacumModel.rotation.y = Math.PI / 2; // Atur rotasi menjadi menghadap ke kanan
+    isRotatedRight = true; // Setel ke true agar rotasi hanya terjadi sekali
+  }
+}
+
+function rotateForward() {
+  if (!isRotatedForward) {
+    VacumModel.rotation.y = Math.PI; // Atur rotasi menjadi menghadap ke depan
+    isRotatedForward = true; // Setel ke true agar rotasi hanya terjadi sekali
+  }
+}
+
+function rotateBackward() {
+  if (!isRotatedBackward) {
+    VacumModel.rotation.y = 0; // Atur rotasi menjadi menghadap ke belakang
+    isRotatedBackward = true; // Setel ke true agar rotasi hanya terjadi sekali
+  }
+}
+
+function rotateBottom() {
+  if (!isRotatedBottom) {
+    // Tambahkan logika rotasi ke bawah di sini jika diperlukan
+    isRotatedBottom = true; // Setel ke true agar rotasi hanya terjadi sekali
+  }
+}
+
+
+
+
+
+
+function loadVacumGLTF(){
+  const loader = new GLTFLoader();
+  loader.load(
+    './vacum/scene.gltf',
+    (gltf) => {
+      VacumModel = gltf.scene; // Simpan referensi model vakum
+
+      VacumModel.position.set(-4.3, 0.13, -4);
+      const scaleFactor = 3;
+      VacumModel.scale.set(scaleFactor, scaleFactor, scaleFactor)
+
+      scene.add(VacumModel)
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+    },
+    (error) => {
+      console.error('An error happened', error);
+    }
+  )
+}
+
+
 
 function loadDrawerGLTF() {
   const loader = new GLTFLoader();
@@ -618,6 +792,8 @@ function loadWardrobeGLTF() {
     }
   );
 }
+
+
 
 function createWallNextToDoor() {
   const doorWidth = 2; // Lebar pintu GLTF
