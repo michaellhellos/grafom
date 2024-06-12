@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
-
 let camera, renderer, controls, clock;
 const scene = new THREE.Scene();
 let door, doorMixer, doorOpenAction, doorCloseAction, doorState = 'closed';
@@ -15,15 +13,9 @@ let isRotatedForward = false; // Menandai apakah rotasi ke depan telah dilakukan
 let isRotatedBackward = false; // Menandai apakah rotasi ke belakang telah dilakukan
 let isRotatedBottom = false; // Menandai apakah rotasi ke bawah telah dilakukan
 
-
-
 function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(-2.7, 3.2, 5);
-
-  
-
-
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
@@ -76,15 +68,15 @@ function init() {
   loadDoorGLTF();
   createWallNextToDoor();
   loadBabyLolaGLTF();
-  loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
+  // loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
   loadACGLTF();
   loadTableGLTF(); 
   loadMonitorGLTF();
   loadLampuGLTF();
   loadVacumGLTF()
-  loadWirelessChargerGLTF();
   loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
   loadWardrobeGLTF();
+  loadWirelessChargerGLTF();
   animate();
 }
 
@@ -159,12 +151,6 @@ function createSceneObjects() {
 
   const doorOpenTrack = new THREE.NumberKeyframeTrack('.rotation[y]', openDoorKeyframes.map(kf => kf.time), openDoorKeyframes.map(kf => kf.value));
   const doorCloseTrack = new THREE.NumberKeyframeTrack('.rotation[y]', closeDoorKeyframes.map(kf => kf.time), closeDoorKeyframes.map(kf => kf.value));
-
-  const openDoorClip = new THREE.AnimationClip('openDoor', 1, [doorOpenTrack]);
-  const closeDoorClip = new THREE.AnimationClip('closeDoor', 1, [doorCloseTrack]);
-  let doorOpenAction, doorCloseAction, doorState = 'closed';
-  let laptopOpenAction, laptopCloseAction, laptopState = 'closed';
-
   const woodTexture = new THREE.TextureLoader().load('gambar5.jpg');
   const woodMaterial = new THREE.MeshBasicMaterial({ map: woodTexture });
   const tableGeometry = new THREE.BoxGeometry(4, 0.1, 2.1);
@@ -195,15 +181,6 @@ function createSceneObjects() {
     { time: 0, value: -Math.PI / 2 },
     { time: 1, value: 0 }
   ];
-
-  const openLaptopTrack = new THREE.NumberKeyframeTrack('.rotation[x]', openLaptopKeyframes.map(kf => kf.time), openLaptopKeyframes.map(kf => kf.value));
-  const closeLaptopTrack = new THREE.NumberKeyframeTrack('.rotation[x]', closeLaptopKeyframes.map(kf => kf.time), closeLaptopKeyframes.map(kf => kf.value));
-
-  const openLaptopClip = new THREE.AnimationClip('openLaptop', 1, [openLaptopTrack]);
-  const closeLaptopClip = new THREE.AnimationClip('closeLaptop', 1, [closeLaptopTrack]);
-
-  laptopOpenAction = laptopMixer.clipAction(openLaptopClip);
-  laptopCloseAction = laptopMixer.clipAction(closeLaptopClip);
 
 //lemari
   const wardrobeGeometry = new THREE.BoxGeometry(3, 4, 1.5);
@@ -278,8 +255,6 @@ function loadGLTF() {
   );
 }
 
-
-
 function loadChairGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -312,7 +287,6 @@ function loadChairGLTF() {
   );
 }
 
-
 function loadBedGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -337,8 +311,6 @@ function loadBedGLTF() {
     }
   );
 }
-
-
 
 function loadLampGLTF() {
   const loader = new GLTFLoader();
@@ -369,7 +341,6 @@ function loadLampGLTF() {
     }
   );
 }
-
 
 function loadBabyLolaGLTF() {
   const loader = new GLTFLoader();
@@ -470,7 +441,6 @@ function loadMouseGLTF() {
   );
 }
 
-
 function addScaleControls(model) {
   const scaleInput = document.createElement('input');
   scaleInput.type = 'range';
@@ -519,68 +489,9 @@ function loadMonitorGLTF() {
   );
 }
 
-function loadWirelessChargerGLTF() {
-  const loader = new GLTFLoader();
-  loader.load(
-    './wireless_charger_usb_qc/scene.gltf', // Path to your GLTF wireless charger file
-    (gltf) => {
-      const wirelessChargerModel = gltf.scene;
-      wirelessChargerModel.position.set(1, 0, -3); // Adjust the position according to your needs
-
-      // You may need to adjust the scale and rotation of the wireless charger
-      wirelessChargerModel.scale.set(0.1, 0.1, 0.1); // Example scale factor
-      wirelessChargerModel.rotation.y = Math.PI / 2; // Example rotation (90 degrees)
-
-      // Add the wireless charger model to the scene
-      scene.add(wirelessChargerModel);
-    },
-    (xhr) => {
-      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-    },
-    (error) => {
-      console.error('An error happened while loading the GLTF model', error);
-    }
-  );
-}
-
 
 function createButtons() {
-  const openButton = document.createElement('button');
-  openButton.textContent = 'Open Door';
-  openButton.style.position = 'absolute';
-  openButton.style.top = '10px';
-  openButton.style.left = '10px';
-  document.body.appendChild(openButton);
-  openButton.addEventListener('click', () => {
-    if (doorState === 'closed') {
-      doorOpenAction.play();
-      doorCloseAction.stop();
-      doorState = 'open';
-    }
-  });
-
-  const closeButton = document.createElement('button');
-  closeButton.textContent = 'Close Door';
-  closeButton.style.position = 'absolute';
-  closeButton.style.top = '40px';
-  closeButton.style.left = '10px';
-  document.body.appendChild(closeButton);
-  closeButton.addEventListener('click', () => {
-    if (doorState === 'open') {
-      doorCloseAction.play();
-      doorOpenAction.stop();
-      doorState = 'closed';
-    }
-  });
-
-  const laptopButton = document.createElement('button');
-  laptopButton.textContent = 'Open Laptop';
-  laptopButton.style.position = 'absolute';
-  laptopButton.style.top = '70px';
-  laptopButton.style.left = '10px';
-  document.body.appendChild(laptopButton);
-  laptopButton.addEventListener('click', toggleLaptop);
-
+  
 }
 
 function toggleLaptop() {
@@ -594,7 +505,6 @@ function toggleLaptop() {
     laptopState = 'closed';
   }
 }
-
 
 function animate() {
   requestAnimationFrame(animate);
@@ -682,11 +592,6 @@ function rotateBottom() {
   }
 }
 
-
-
-
-
-
 function loadVacumGLTF(){
   const loader = new GLTFLoader();
   loader.load(
@@ -708,9 +613,43 @@ function loadVacumGLTF(){
     }
   )
 }
+function loadWirelessChargerGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    '../hpdantempat/scene.gltf', // Path to your GLTF wireless charger file
+    (gltf) => {
+      wirelessChargerModel = gltf.scene;
+      wirelessChargerModel.position.set(-2.7, 1.7, -4.1); // Set to origin to check visibility
+      wirelessChargerModel.scale.set(10, 10, 10); // Set scale to 1 to check visibility
+      wirelessChargerModel.rotation.y = 0; // Reset rotation to check visibility
 
+      // Ensure that the texture is correctly applied
+      wirelessChargerModel.traverse((node) => {
+        if (node.isMesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
 
+          // Check if the material has a texture map, if not, add one
+          if (node.material && !node.material.map) {
+            const textureLoader = new THREE.TextureLoader();
+            const texture = textureLoader.load('path/to/your/texture.jpg'); // Replace with your texture path
+            node.material.map = texture;
+            node.material.needsUpdate = true;
+          }
+        }
+      });
 
+      // Add the wireless charger model to the scene
+      scene.add(wirelessChargerModel);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened while loading the GLTF model', error);
+    }
+  );
+}
 function loadDrawerGLTF() {
   const loader = new GLTFLoader();
   loader.load(

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Wireless Charging Station
+* source:	https://sketchfab.com/3d-models/wireless-charging-station-6e5af13c6ba8455ba11151b2f1a90c4e
+* author:	Aleksei (https://sketchfab.com/virare3d)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Wireless Charging Station" (https://sketchfab.com/3d-models/wireless-charging-station-6e5af13c6ba8455ba11151b2f1a90c4e) by Aleksei (https://sketchfab.com/virare3d) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
