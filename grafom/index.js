@@ -76,9 +76,11 @@ function init() {
   loadVacumGLTF()
   loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
   loadWardrobeGLTF();
+  loadLampuDapurGLTf();
+  loadLemariDapurGLTF();
   loadWirelessChargerGLTF();
   loadMakanGLTF();
-  loadPlateGLTF();
+  // loadPlateGLTF();
   animate();
 }
 
@@ -250,8 +252,36 @@ function loadLampuGLTF(){
 
       scene.add(LampModel)
       const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Warna putih, intensitas 1
+      directionalLight.position.set(10, 10, 10); // Atur posisi arah cahaya
+      scene.add(directionalLight);
+
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened', error);
+    }
+  )
+}
+
+
+function loadLampuDapurGLTf(){
+  const loader = new GLTFLoader();
+  loader.load(
+   './lamp/scene.gltf',
+    (gltf) => {
+      const LampModel = gltf.scene;
+      LampModel.position.set(-12, 4.05, 0);
+
+      const scaleFactor = 1.5; // Faktor skala yang diinginkan
+      LampModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      scene.add(LampModel)
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Warna putih, intensitas 1
       directionalLight.position.set(1, 1, 1); // Atur posisi arah cahaya
       scene.add(directionalLight);
+
 
     },
     (xhr) => {
@@ -715,6 +745,7 @@ function loadDrawerGLTF() {
     }
   );
 }
+
 function loadDoorGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -804,7 +835,7 @@ function loadPlateGLTF() {
 function loadMakanGLTF() {
   const loader = new GLTFLoader();
   loader.load(
-    './makan/scene.gltf', // Path ke file GLTF meja makan Anda
+    './meja_makan/scene.gltf', // Path ke file GLTF meja makan Anda
     (gltf) => {
       gltf.scene.traverse((child) => {
         if (child.isMesh) {
@@ -826,7 +857,7 @@ function loadMakanGLTF() {
       const pathMakan = gltf.scene; // Simpan referensi model meja makan
 
       pathMakan.position.set(-12, 0, 0); // Atur posisi meja makan sesuai kebutuhan Anda
-      const scaleFactor = 0.01; // Faktor skala yang diinginkan
+      const scaleFactor = 0.0025; // Faktor skala yang diinginkan
       pathMakan.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
       scene.add(pathMakan); // Tambahkan meja makan ke dalam scene
@@ -840,7 +871,44 @@ function loadMakanGLTF() {
   );
 }
 
+function loadLemariDapurGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './lemari_dapur/scene.gltf', // Path ke file GLTF meja makan Anda
+    (gltf) => {
+      gltf.scene.traverse((child) => {
+        if (child.isMesh) {
+          // Set properti receiveShadow dan castShadow
+          child.receiveShadow = true;
+          child.castShadow = true;
 
+          // Check untuk bahan (material) pada mesh
+          if (child.material) {
+            // Set material untuk menerima bayangan jika belum diatur
+            if (child.material instanceof THREE.MeshStandardMaterial || child.material instanceof THREE.MeshPhongMaterial) {
+              child.material.receiveShadow = true;
+              child.material.castShadow = true;
+            }
+          }
+        }
+      });
+
+      const Cabinet = gltf.scene; // Simpan referensi model meja makan
+
+      Cabinet.position.set(-8.57, 0, -4.8); // Atur posisi meja makan sesuai kebutuhan Anda
+      const scaleFactor = 0.78; // Faktor skala yang diinginkan
+      Cabinet.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      scene.add(Cabinet); // Tambahkan meja makan ke dalam scene
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened while loading the GLTF model', error);
+    }
+  );
+}
 
 function createWallNextToDoor() {
   const doorWidth = 2; // Lebar pintu GLTF
