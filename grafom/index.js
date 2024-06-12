@@ -250,10 +250,11 @@ function loadLampuGLTF(){
       const scaleFactor = 2; // Faktor skala yang diinginkan
       LampModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-      scene.add(LampModel)
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Warna putih, intensitas 1
-      directionalLight.position.set(10, 10, 10); // Atur posisi arah cahaya
-      scene.add(directionalLight);
+      scene.add(LampModel);
+      
+      const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1); // Warna merah, intensitas 1
+      directionalLight1.position.set(10, 10, 10); // Atur posisi arah cahaya
+      scene.add(directionalLight1);
 
     },
     (xhr) => {
@@ -262,7 +263,7 @@ function loadLampuGLTF(){
     (error) => {
       console.error('An error happened', error);
     }
-  )
+  );
 }
 
 
@@ -271,17 +272,17 @@ function loadLampuDapurGLTf(){
   loader.load(
    './lamp/scene.gltf',
     (gltf) => {
-      const LampModel = gltf.scene;
-      LampModel.position.set(-12, 4.05, 0);
+      const LampuModel = gltf.scene;
+      LampuModel.position.set(-12, 4.05, 0);
 
       const scaleFactor = 1.5; // Faktor skala yang diinginkan
-      LampModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+      LampuModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-      scene.add(LampModel)
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Warna putih, intensitas 1
-      directionalLight.position.set(1, 1, 1); // Atur posisi arah cahaya
-      scene.add(directionalLight);
-
+      scene.add(LampuModel);
+      
+      const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1); // Warna putih, intensitas 1
+      directionalLight2.position.set(1, 1, 1); // Atur posisi arah cahaya
+      scene.add(directionalLight2);
 
     },
     (xhr) => {
@@ -290,8 +291,9 @@ function loadLampuDapurGLTf(){
     (error) => {
       console.error('An error happened', error);
     }
-  )
+  );
 }
+
 
 function loadGLTF() {
   const loader = new GLTFLoader();
@@ -669,18 +671,26 @@ function loadVacumGLTF(){
 
       VacumModel.position.set(-4.3, 0.13, -4);
       const scaleFactor = 3;
-      VacumModel.scale.set(scaleFactor, scaleFactor, scaleFactor)
+      VacumModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-      scene.add(VacumModel)
+      // Tambahkan properti receiveShadow pada semua mesh di dalam objek
+      VacumModel.traverse((child) => {
+        if (child.isMesh) {
+          child.receiveShadow = true;
+        }
+      });
+
+      scene.add(VacumModel);
     },
     (xhr) => {
-      console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
     },
     (error) => {
       console.error('An error happened', error);
     }
-  )
+  );
 }
+
 function loadWirelessChargerGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -735,6 +745,14 @@ function loadDrawerGLTF() {
       const scaleFactor = 1; // Faktor skala yang diinginkan
       drawerModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
+      // Tambahkan properti receiveShadow pada semua mesh di dalam objek
+      drawerModel.traverse((child) => {
+        if (child.isMesh) {
+          child.receiveShadow = true;
+        }
+      });
+
+      // Tambahkan objek laci ke dalam scene
       scene.add(drawerModel);
     },
     (xhr) => {
@@ -745,6 +763,7 @@ function loadDrawerGLTF() {
     }
   );
 }
+
 
 function loadDoorGLTF() {
   const loader = new GLTFLoader();
@@ -870,6 +889,7 @@ function loadMakanGLTF() {
     }
   );
 }
+
 
 function loadLemariDapurGLTF() {
   const loader = new GLTFLoader();
