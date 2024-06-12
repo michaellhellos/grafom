@@ -1,0 +1,313 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 21960,
+      "max": [
+        2.426629066467285,
+        8.330131530761719,
+        2.426629066467285
+      ],
+      "min": [
+        -2.426629066467285,
+        -0.9175694584846497,
+        -2.4266293048858643
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 263520,
+      "componentType": 5126,
+      "count": 21960,
+      "max": [
+        0.9999978542327881,
+        1.0,
+        0.9999978542327881
+      ],
+      "min": [
+        -0.9999978542327881,
+        -1.0,
+        -0.9999978542327881
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 21960,
+      "max": [
+        1.0000001192092896,
+        1.000000238418579
+      ],
+      "min": [
+        0.0,
+        0.01000000536441803
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 87552,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 527040,
+      "componentType": 5126,
+      "count": 1925,
+      "max": [
+        2.408755302429199,
+        8.567171096801758,
+        2.408755302429199
+      ],
+      "min": [
+        -2.408755302429199,
+        7.851653099060059,
+        -2.408755302429199
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 550140,
+      "componentType": 5126,
+      "count": 1925,
+      "max": [
+        0.9985515475273132,
+        0.7360947132110596,
+        0.9985515475273132
+      ],
+      "min": [
+        -0.9985515475273132,
+        0.05380421504378319,
+        -0.9985515475273132
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 175680,
+      "componentType": 5126,
+      "count": 1925,
+      "max": [
+        1.0000001192092896,
+        1.0000001192092896
+      ],
+      "min": [
+        0.0,
+        0.01000000536441803
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 350208,
+      "componentType": 5125,
+      "count": 9216,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "akabraw (https://sketchfab.com/akabraw)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/piring-garis-coklat-6d5a4e1174dd4f5fa0a9a9076e476b91",
+      "title": "piring garis coklat"
+    },
+    "generator": "Sketchfab-12.97.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 387072,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 191080,
+      "byteOffset": 387072,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 573240,
+      "byteOffset": 578152,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1151392,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Material.001",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.485972,
+          0.45089,
+          0.339473,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.08
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Material.002",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.137582,
+          0.0636966,
+          0.027164,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.5043824895466348
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        0.060660626739263535,
+        -9.754972618220422e-18,
+        -9.754972618220425e-18,
+        0.0,
+        -9.754972618220424e-18,
+        2.3224337517044985e-17,
+        -0.060660626739263535,
+        0.0,
+        9.754972618220424e-18,
+        0.060660626739263535,
+        2.3224337517044985e-17,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "root"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "GLTF_SceneRootNode"
+    },
+    {
+      "children": [
+        4,
+        5
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.06615801900625229,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Cylinder_0"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_4"
+    },
+    {
+      "mesh": 1,
+      "name": "Object_5"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}

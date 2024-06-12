@@ -68,15 +68,17 @@ function init() {
   loadDoorGLTF();
   createWallNextToDoor();
   loadBabyLolaGLTF();
-  // loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
+  loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
   loadACGLTF();
   loadTableGLTF(); 
   loadMonitorGLTF();
-  loadLampuGLTF();
+  // loadLampuGLTF();
   loadVacumGLTF()
   loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
   loadWardrobeGLTF();
   loadWirelessChargerGLTF();
+  loadMakanGLTF();
+  loadPlateGLTF();
   animate();
 }
 
@@ -87,7 +89,22 @@ function createSceneObjects() {
   const floor = new THREE.Mesh(floorGeometry, floorMaterial);
   floor.rotation.x = -Math.PI / 2;
   scene.add(floor);
-
+  //lantai ke 2
+  const floorGeometry1 = new THREE.PlaneGeometry(15, 10);
+  const floorTexture1 = new THREE.TextureLoader().load('lantai.jpeg');
+  const floorMaterial1 = new THREE.MeshBasicMaterial({ map: floorTexture1 });
+  const floor1 = new THREE.Mesh(floorGeometry1, floorMaterial1);
+  
+  // Mengatur rotasi agar berputar sekitar sumbu x
+  floor1.rotation.x = -Math.PI / 2;
+  
+  // Mengatur posisi x, y, dan z
+  floor1.position.x =-12.5 /* nilai posisi x yang diinginkan */;
+  floor1.position.y =0 /* nilai posisi y yang diinginkan */;
+  floor1.position.z =0 /* nilai posisi z yang diinginkan */;
+  
+  scene.add(floor1);
+  //
   const ceilingGeometry = new THREE.PlaneGeometry(10, 10);
   const ceilingMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
   const ceiling = new THREE.Mesh(ceilingGeometry, ceilingMaterial);
@@ -103,16 +120,35 @@ function createSceneObjects() {
   const wall1 = new THREE.Mesh(wallGeometry, wallMaterial);
   wall1.position.set(0, 2.5, -5);
   scene.add(wall1);
+//tembok ke 2
+const textureLoader1 = new THREE.TextureLoader();
+  const wallTexture1 = textureLoader.load('wallpaper.jpeg');
+  const wallMaterial1 = new THREE.MeshBasicMaterial({ map: wallTexture1 });
+  const wallGeometry1 = new THREE.BoxGeometry(20, 5, 0.1);
 
+  const wall10 = new THREE.Mesh(wallGeometry1, wallMaterial1);
+  wall10.position.set(-10, 2.5, -5);
+  scene.add(wall10);
+  //
   const wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
   wall2.position.set(0, 2.5, 5);
   scene.add(wall2);
+  //
+  const wall11 = new THREE.Mesh(wallGeometry1, wallMaterial1);
+  wall11.position.set(-10, 2.5, 5);
+  scene.add(wall11);
+  //
 
   const sideWallGeometry = new THREE.BoxGeometry(0.1, 5, 10);
   const wall4 = new THREE.Mesh(sideWallGeometry, wallMaterial);
   wall4.position.set(5, 2.5, 0);
   scene.add(wall4);
-
+//
+const sideWallGeometry1 = new THREE.BoxGeometry(0.1, 5, 10);
+  const wall13 = new THREE.Mesh(sideWallGeometry, wallMaterial);
+  wall13.position.set(-20, 2.5, 0);
+  scene.add(wall13);
+  //
   const windowGeometry = new THREE.PlaneGeometry(3, 3);
   const windowMaterial = new THREE.MeshBasicMaterial({ color: 0xadd8e6, side: THREE.DoubleSide });
   const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
@@ -677,7 +713,6 @@ function loadDrawerGLTF() {
     }
   );
 }
-
 function loadDoorGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -722,6 +757,77 @@ function loadWardrobeGLTF() {
 
       // Tambahkan model lemari ke dalam scene
       scene.add(wardrobeModel);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened while loading the GLTF model', error);
+    }
+  );
+}
+function loadPlateGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './kue/scene.gltf', // Ganti dengan lokasi file GLTF piring Anda
+    (gltf) => {
+      const plateModel = gltf.scene;
+
+      // Sesuaikan posisi piring di dalam ruangan Anda
+      plateModel.position.set(-13, 2.3, 2.3);
+
+      // Sesuaikan skala model jika perlu
+      const scaleFactor = 0.1; // Faktor skala yang diinginkan
+      plateModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      // Tambahkan properti receiveShadow dan castShadow jika diperlukan
+      plateModel.traverse((child) => {
+        if (child.isMesh) {
+          child.receiveShadow = true;
+          child.castShadow = true;
+        }
+      });
+
+      scene.add(plateModel); // Tambahkan model piring ke dalam scene
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened while loading the GLTF model', error);
+    }
+  );
+}
+
+function loadMakanGLTF() {
+  const loader = new GLTFLoader();
+  loader.load(
+    './makan/scene.gltf', // Path ke file GLTF meja makan Anda
+    (gltf) => {
+      gltf.scene.traverse((child) => {
+        if (child.isMesh) {
+          // Set properti receiveShadow dan castShadow
+          child.receiveShadow = true;
+          child.castShadow = true;
+
+          // Check untuk bahan (material) pada mesh
+          if (child.material) {
+            // Set material untuk menerima bayangan jika belum diatur
+            if (child.material instanceof THREE.MeshStandardMaterial || child.material instanceof THREE.MeshPhongMaterial) {
+              child.material.receiveShadow = true;
+              child.material.castShadow = true;
+            }
+          }
+        }
+      });
+
+      const pathMakan = gltf.scene; // Simpan referensi model meja makan
+
+      pathMakan.position.set(-12, 0, 0); // Atur posisi meja makan sesuai kebutuhan Anda
+      const scaleFactor = 0.01; // Faktor skala yang diinginkan
+      pathMakan.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      scene.add(pathMakan); // Tambahkan meja makan ke dalam scene
     },
     (xhr) => {
       console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
@@ -777,8 +883,5 @@ function createWallNextToDoor() {
 
   scene.add(wall);
 }
-
-
-
 init();
 
