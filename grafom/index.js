@@ -72,7 +72,7 @@ function init() {
   loadACGLTF();
   loadTableGLTF(); 
   loadMonitorGLTF();
-  // loadLampuGLTF();
+  loadLampuGLTF();
   loadVacumGLTF()
   loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
   loadWardrobeGLTF();
@@ -105,13 +105,15 @@ function createSceneObjects() {
   
   scene.add(floor1);
   //
-  const ceilingGeometry = new THREE.PlaneGeometry(10, 10);
+  const ceilingGeometry = new THREE.PlaneGeometry(25, 10);
   const ceilingMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
   const ceiling = new THREE.Mesh(ceilingGeometry, ceilingMaterial);
   ceiling.rotation.x = Math.PI / 2;
-  ceiling.position.y = 5;
+  ceiling.position.set(-7.5, 5, 0); // Atur posisi x, y, dan z
   scene.add(ceiling);
+//
 
+//
   const textureLoader = new THREE.TextureLoader();
   const wallTexture = textureLoader.load('wallpaper.jpeg');
   const wallMaterial = new THREE.MeshBasicMaterial({ map: wallTexture });
