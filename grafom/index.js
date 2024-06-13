@@ -34,7 +34,7 @@ const worldOctree = new Octree();
 
 const playerCollider = new Capsule(
   new THREE.Vector3(-2.7, 10, 5),
-  new THREE.Vector3(0, 5, 0),
+  new THREE.Vector3(-3, 10, 0),
   0.5
 );
 
@@ -119,7 +119,7 @@ function init() {
   loadWardrobeGLTF();
   loadLampuDapurGLTf();
   loadLemariDapurGLTF();
-  loadWirelessChargerGLTF();
+  // loadWirelessChargerGLTF();
   loadMakanGLTF();
   // loadPlateGLTF();
   animate();
@@ -132,19 +132,19 @@ document.addEventListener("keyup", (event) => {
   keyStates[event.code] = false;
 });
 function createSceneObjects() {
-  const floorGeometry = new THREE.BoxGeometry(10, 0.1, 10);
+  const floorGeometry = new THREE.BoxGeometry(200, 0.1, 10);
   const floorTexture = new THREE.TextureLoader().load("lantai.jpeg");
   const floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture });
   const floor = new THREE.Mesh(floorGeometry, floorMaterial);
   worldOctree.fromGraphNode(floor);
   floor.rotation.x = -Math.PI / 2;
-  scene.add(floor);
+  // scene.add(floor);
   //lantai ke 2
   const floorGeometry1 = new THREE.PlaneGeometry(15, 10);
   const floorTexture1 = new THREE.TextureLoader().load("lantai.jpeg");
   const floorMaterial1 = new THREE.MeshBasicMaterial({ map: floorTexture1 });
   const floor1 = new THREE.Mesh(floorGeometry1, floorMaterial1);
-
+  // worldOctree.fromGraphNode(floor1);
   // Mengatur rotasi agar berputar sekitar sumbu x
   floor1.rotation.x = -Math.PI / 2;
 
@@ -264,7 +264,7 @@ function createSceneObjects() {
   const laptopMaterial = new THREE.MeshBasicMaterial({ color: 0x666666 });
   const laptopBase = new THREE.Mesh(laptopBaseGeometry, laptopMaterial);
   laptopBase.position.set(0, 0.55, -4.5);
-  scene.add(laptopBase);
+  // scene.add(laptopBase);
 
   const laptopTopGeometry = new THREE.BoxGeometry(0.8, 0.02, 0.5);
   laptopTop = new THREE.Mesh(laptopTopGeometry, laptopMaterial);
@@ -296,7 +296,7 @@ function createSceneObjects() {
   const lampMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
   const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
   lamp.position.set(0, 4.9, 0);
-  scene.add(lamp);
+  // scene.add(lamp);
 
   loadGLTF();
 }
@@ -304,11 +304,11 @@ function createSceneObjects() {
 function loadLampuGLTF() {
   const loader = new GLTFLoader();
   loader.load(
-    "./lamp/scene.gltf",
+    "./kipas/celling_fan_clean.glb",
     (gltf) => {
       const LampModel = gltf.scene;
       LampModel.position.set(0, 3.74, 0);
-
+      LampModel.name="fan"
       const scaleFactor = 2; // Faktor skala yang diinginkan
       LampModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
@@ -399,6 +399,7 @@ function loadChairGLTF() {
       // Mengatur skala model
       const scaleFactor = 0.06; // Faktor skala yang diinginkan (sebelumnya 0.5, sekarang 0.25)
       chairModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+      //collision
       worldOctree.fromGraphNode(chairModel)
       // Tambahkan properti receiveShadow dan castShadow
       chairModel.receiveShadow = true; // Menerima bayangan
@@ -505,6 +506,7 @@ function loadTableGLTF() {
 
       // Tambahkan model meja ke dalam scene
       scene.add(tableModel);
+      //collision
       worldOctree.fromGraphNode(tableModel)
       // Tambahkan slider atau kontrol lain untuk mengubah skala
       addScaleControls(tableModel);
@@ -711,7 +713,10 @@ function animate() {
     updatePlayer(deltaTime);
     teleportPlayerIfOob();
   }
-
+  const fan = scene.getObjectByName("fan")
+  if(fan){
+    fan.rotation.y -=0.05
+  }
   const delta = clock.getDelta();
   if (doorMixer) doorMixer.update(delta);
   if (laptopMixer) laptopMixer.update(delta);
@@ -771,12 +776,35 @@ function rotateBottom() {
   }
 }
 
+function moveVacuum() {
+  const startPosition = new THREE.Vector3(-4.3, 0.13, -4);
+  const endPosition = new THREE.Vector3(-4.3, 0.13, 0);
+  const totalSteps = 8; // Jumlah langkah (misalnya 8 langkah dari posisi awal ke posisi akhir)
+  let currentStep = 0;
+
+  const moveInterval = setInterval(() => {
+    if (currentStep >= totalSteps) {
+      clearInterval(moveInterval); // Hentikan interval jika sudah mencapai posisi akhir
+      return;
+    }
+
+    // Hitung posisi baru berdasarkan langkah saat ini
+    const newPosition = startPosition.clone().lerp(endPosition, currentStep / totalSteps);
+    
+    // Terapkan posisi baru pada model vakum
+    VacumModel.position.copy(newPosition);
+
+    currentStep++;
+  }, 1000); // Interval pergerakan (dalam milidetik)
+}
+
+
 function loadVacumGLTF() {
   const loader = new GLTFLoader();
   loader.load(
     "./vacum/scene.gltf",
     (gltf) => {
-      VacumModel = gltf.scene; // Simpan referensi model vakum
+      const VacumModel = gltf.scene; // Simpan referensi model vakum
 
       VacumModel.position.set(-4.3, 0.13, -4);
       const scaleFactor = 3;
@@ -788,12 +816,33 @@ function loadVacumGLTF() {
           child.receiveShadow = true;
         }
       });
-      worldOctree.fromGraphNode(VacumModel)
+      worldOctree.fromGraphNode(VacumModel);
       // Tambahkan model vakum ke dalam scene
+      
       scene.add(VacumModel);
 
       // Panggil fungsi playerCollisions() di sini setelah model vakum dimuat
       playerCollisions();
+
+      // Definisikan variabel global untuk menyimpan posisi z awal vakum
+      let initialVacumZPosition = -4;
+
+      // Tambahkan event listener untuk menangani tekanan tombol "P"
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'p' || event.key === 'P') {
+          // Perbarui posisi z vakum
+          initialVacumZPosition += 0.1; // Misalnya, vakum bergerak 0.1 unit setiap kali tombol ditekan
+
+          // Perbarui posisi vakum
+          if (VacumModel) {
+            VacumModel.position.set(-4.3, 0.13, initialVacumZPosition);
+            
+            // Perbarui posisi worldOctree
+            worldOctree.fromGraphNode(VacumModel);
+          }
+        }
+      });
+
     },
     (xhr) => {
       console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -803,6 +852,8 @@ function loadVacumGLTF() {
     }
   );
 }
+
+
 
 function loadBedGLTF() {
   const loader = new GLTFLoader();
@@ -817,8 +868,9 @@ function loadBedGLTF() {
 
       // Putar posisi kasur 90 derajat dari posisi sekarang
       bedModel.rotation.y += Math.PI / 1; // Tambahkan 90 derajat
-      worldOctree.fromGraphNode(bedModel);
+      // worldOctree.fromGraphNode(bedModel);
       scene.add(bedModel);
+      worldOctree.fromGraphNode(bedModel)
     },
     (xhr) => {
       console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -891,6 +943,7 @@ function loadDrawerGLTF() {
       });
 
       // Tambahkan objek laci ke dalam scene
+      // worldOctree.fromGraphNode(drawerModel)
       scene.add(drawerModel);
     },
     (xhr) => {
@@ -943,7 +996,7 @@ function loadWardrobeGLTF() {
       // Mengatur skala model jika diperlukan
       const scaleFactor = 0.8; // Faktor skala yang diinginkan, sesuaikan jika perlu
       wardrobeModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
+      worldOctree.fromGraphNode(wardrobeModel)
       // Tambahkan model lemari ke dalam scene
       scene.add(wardrobeModel);
     },
@@ -1019,6 +1072,7 @@ function loadMakanGLTF() {
       const scaleFactor = 0.0025; // Faktor skala yang diinginkan
       pathMakan.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
+      // worldOctree.fromGraphNode(pathMakan)
       scene.add(pathMakan); // Tambahkan meja makan ke dalam scene
     },
     (xhr) => {
@@ -1061,6 +1115,7 @@ function loadLemariDapurGLTF() {
       const scaleFactor = 0.78; // Faktor skala yang diinginkan
       Cabinet.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
+      worldOctree.fromGraphNode(Cabinet)
       scene.add(Cabinet); // Tambahkan meja makan ke dalam scene
     },
     (xhr) => {
