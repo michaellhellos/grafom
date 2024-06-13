@@ -1,17 +1,18 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
 let camera, renderer, controls, clock;
 const scene = new THREE.Scene();
 let door, doorMixer, doorOpenAction, doorCloseAction, doorState = 'closed';
 let laptopMixer, laptopOpenAction, laptopCloseAction, laptopState = 'closed';
 let laptopTop;
 let VacumModel;
-let isRotatedLeft = false; // Menandai apakah rotasi ke kiri telah dilakukan
-let isRotatedRight = false; // Menandai apakah rotasi ke kanan telah dilakukan
-let isRotatedForward = false; // Menandai apakah rotasi ke depan telah dilakukan
-let isRotatedBackward = false; // Menandai apakah rotasi ke belakang telah dilakukan
-let isRotatedBottom = false; // Menandai apakah rotasi ke bawah telah dilakukan
+let isRotatedLeft = false; 
+let isRotatedRight = false; 
+let isRotatedForward = false; 
+let isRotatedBackward = false; 
+let isRotatedBottom = false;
 
 function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -23,7 +24,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Warna putih (0xffffff) dengan intensitas 0.5
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
 
   clock = new THREE.Clock();
@@ -32,55 +33,26 @@ function init() {
 
   document.addEventListener('keydown', (event) => {
     onKeyDown(event);
-  
-    // Handle rotation when 'a' is pressed
-    if (event.key === 'a') {
-      rotateLeft();
-    }
-  
-    // Handle rotation when 'd' is pressed
-    if (event.key === 'd') {
-      rotateRight();
-    }
-  
-    // Handle rotation when 'w' is pressed
-    if (event.key === 'w') {
-      rotateForward();
-    }
-  
-    // Handle rotation when 's' is pressed
-    if (event.key === 's') {
-      rotateBackward();
-    }
-  
-    // Handle rotation when 'x' is pressed
-    if (event.key === 'x') {
-      rotateBottom();
-    }
   });
-  
-  
-  
-  createButtons();
+
   loadChairGLTF();
   loadBedGLTF();
   loadDrawerGLTF();
   loadDoorGLTF();
   createWallNextToDoor();
   loadBabyLolaGLTF();
-  loadLampGLTF(); // Panggil fungsi untuk memuat lampu GLTF
+  loadLampGLTF(); 
   loadACGLTF();
   loadTableGLTF(); 
   loadMonitorGLTF();
   loadLampuGLTF();
-  loadVacumGLTF()
-  loadMouseGLTF(); // Tambahkan ini untuk memuat model mouse 3D
+  loadVacumGLTF();
+  loadMouseGLTF(); 
   loadWardrobeGLTF();
   loadLampuDapurGLTf();
   loadLemariDapurGLTF();
   loadWirelessChargerGLTF();
   loadMakanGLTF();
-  // loadPlateGLTF();
   animate();
 }
 
@@ -91,31 +63,22 @@ function createSceneObjects() {
   const floor = new THREE.Mesh(floorGeometry, floorMaterial);
   floor.rotation.x = -Math.PI / 2;
   scene.add(floor);
-  //lantai ke 2
+
   const floorGeometry1 = new THREE.PlaneGeometry(15, 10);
   const floorTexture1 = new THREE.TextureLoader().load('lantai.jpeg');
   const floorMaterial1 = new THREE.MeshBasicMaterial({ map: floorTexture1 });
   const floor1 = new THREE.Mesh(floorGeometry1, floorMaterial1);
-  
-  // Mengatur rotasi agar berputar sekitar sumbu x
   floor1.rotation.x = -Math.PI / 2;
-  
-  // Mengatur posisi x, y, dan z
-  floor1.position.x =-12.5 /* nilai posisi x yang diinginkan */;
-  floor1.position.y =0 /* nilai posisi y yang diinginkan */;
-  floor1.position.z =0 /* nilai posisi z yang diinginkan */;
-  
+  floor1.position.set(-12.5, 0, 0);
   scene.add(floor1);
-  //
+
   const ceilingGeometry = new THREE.PlaneGeometry(25, 10);
   const ceilingMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
   const ceiling = new THREE.Mesh(ceilingGeometry, ceilingMaterial);
   ceiling.rotation.x = Math.PI / 2;
-  ceiling.position.set(-7.5, 5, 0); // Atur posisi x, y, dan z
+  ceiling.position.set(-7.5, 5, 0);
   scene.add(ceiling);
-//
 
-//
   const textureLoader = new THREE.TextureLoader();
   const wallTexture = textureLoader.load('wallpaper.jpeg');
   const wallMaterial = new THREE.MeshBasicMaterial({ map: wallTexture });
@@ -124,8 +87,7 @@ function createSceneObjects() {
   const wall1 = new THREE.Mesh(wallGeometry, wallMaterial);
   wall1.position.set(0, 2.5, -5);
   scene.add(wall1);
-//tembok ke 2
-const textureLoader1 = new THREE.TextureLoader();
+
   const wallTexture1 = textureLoader.load('wallpaper.jpeg');
   const wallMaterial1 = new THREE.MeshBasicMaterial({ map: wallTexture1 });
   const wallGeometry1 = new THREE.BoxGeometry(20, 5, 0.1);
@@ -133,26 +95,25 @@ const textureLoader1 = new THREE.TextureLoader();
   const wall10 = new THREE.Mesh(wallGeometry1, wallMaterial1);
   wall10.position.set(-10, 2.5, -5);
   scene.add(wall10);
-  //
+
   const wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
   wall2.position.set(0, 2.5, 5);
   scene.add(wall2);
-  //
+
   const wall11 = new THREE.Mesh(wallGeometry1, wallMaterial1);
   wall11.position.set(-10, 2.5, 5);
   scene.add(wall11);
-  //
 
   const sideWallGeometry = new THREE.BoxGeometry(0.1, 5, 10);
   const wall4 = new THREE.Mesh(sideWallGeometry, wallMaterial);
   wall4.position.set(5, 2.5, 0);
   scene.add(wall4);
-//
-const sideWallGeometry1 = new THREE.BoxGeometry(0.1, 5, 10);
+
+  const sideWallGeometry1 = new THREE.BoxGeometry(0.1, 5, 10);
   const wall13 = new THREE.Mesh(sideWallGeometry, wallMaterial);
   wall13.position.set(-20, 2.5, 0);
   scene.add(wall13);
-  //
+
   const windowGeometry = new THREE.PlaneGeometry(3, 3);
   const windowMaterial = new THREE.MeshBasicMaterial({ color: 0xadd8e6, side: THREE.DoubleSide });
   const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
@@ -164,12 +125,9 @@ const sideWallGeometry1 = new THREE.BoxGeometry(0.1, 5, 10);
   door = new THREE.Mesh(doorGeometry, doorMaterial);
   door.position.set(-4.9, 2, 0);
 
-  // Set pivot point pintu ke tepi
-  const pivotPosition = new THREE.Vector3(-1, 2, 0); // Misalnya, di sisi kiri pintu
+  const pivotPosition = new THREE.Vector3(-1, 2, 0);
   door.geometry.translate(pivotPosition.x, pivotPosition.y, pivotPosition.z);
   door.position.sub(pivotPosition);
-
-  // scene.add(door);
 
   const handleGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.05);
   const handleMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
@@ -189,53 +147,6 @@ const sideWallGeometry1 = new THREE.BoxGeometry(0.1, 5, 10);
     { time: 1, value: 0 }
   ];
 
-  const doorOpenTrack = new THREE.NumberKeyframeTrack('.rotation[y]', openDoorKeyframes.map(kf => kf.time), openDoorKeyframes.map(kf => kf.value));
-  const doorCloseTrack = new THREE.NumberKeyframeTrack('.rotation[y]', closeDoorKeyframes.map(kf => kf.time), closeDoorKeyframes.map(kf => kf.value));
-  const woodTexture = new THREE.TextureLoader().load('gambar5.jpg');
-  const woodMaterial = new THREE.MeshBasicMaterial({ map: woodTexture });
-  const tableGeometry = new THREE.BoxGeometry(4, 0.1, 2.1);
-  const table = new THREE.Mesh(tableGeometry, woodMaterial);
-  table.position.set(0, 0.5, -4.5);
-  // scene.add(table);
-
-  const laptopBaseGeometry = new THREE.BoxGeometry(0.8, 0.05, 0.5);
-  const laptopMaterial = new THREE.MeshBasicMaterial({ color: 0x666666 });
-  const laptopBase = new THREE.Mesh(laptopBaseGeometry, laptopMaterial);
-  laptopBase.position.set(0, 0.55, -4.5);
-  scene.add(laptopBase);
-
-  const laptopTopGeometry = new THREE.BoxGeometry(0.8, 0.02, 0.5);
-  laptopTop = new THREE.Mesh(laptopTopGeometry, laptopMaterial);
-  laptopMixer = new THREE.AnimationMixer(laptopTop);
-  // laptopTop.position.set(0, 0.58, -4.75);
-  // scene.add(laptopTop);
-
-  laptopMixer = new THREE.AnimationMixer(laptopTop);
-
-  const openLaptopKeyframes = [
-    { time: 0, value: 0 },
-    { time: 1, value: -Math.PI / 2 }
-  ];
-
-  const closeLaptopKeyframes = [
-    { time: 0, value: -Math.PI / 2 },
-    { time: 1, value: 0 }
-  ];
-
-//lemari
-  const wardrobeGeometry = new THREE.BoxGeometry(3, 4, 1.5);
-  const wardrobeMaterial = new THREE.MeshBasicMaterial({ map: woodTexture });
-  const wardrobe = new THREE.Mesh(wardrobeGeometry, wardrobeMaterial);
-  wardrobe.position.set(4, 2, -3.5); // Ubah posisi untuk menempatkannya di pojok kanan belakang
-  wardrobe.rotation.y = -Math.PI / 2; // Putar lemari agar menghadap ke dalam ruangan
-  // scene.add(wardrobe);
-  
-  const lampGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 32);
-  const lampMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-  const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
-  lamp.position.set(0, 4.9, 0);
-  scene.add(lamp);
-  
   loadGLTF();
 }
 
@@ -557,11 +468,6 @@ function loadMonitorGLTF() {
   );
 }
 
-
-function createButtons() {
-  
-}
-
 function toggleLaptop() {
   if (laptopState === 'closed') {
     laptopOpenAction.play();
@@ -641,25 +547,24 @@ function rotateRight() {
 
 function rotateForward() {
   if (!isRotatedForward) {
-    VacumModel.rotation.y = Math.PI; // Atur rotasi menjadi menghadap ke depan
+    VacumModel.rotation.y = 0; // Atur rotasi menjadi menghadap ke depan
     isRotatedForward = true; // Setel ke true agar rotasi hanya terjadi sekali
   }
 }
 
 function rotateBackward() {
   if (!isRotatedBackward) {
-    VacumModel.rotation.y = 0; // Atur rotasi menjadi menghadap ke belakang
+    VacumModel.rotation.y = Math.PI; // Atur rotasi menjadi menghadap ke belakang
     isRotatedBackward = true; // Setel ke true agar rotasi hanya terjadi sekali
   }
 }
 
 function rotateBottom() {
   if (!isRotatedBottom) {
-    // Tambahkan logika rotasi ke bawah di sini jika diperlukan
+    VacumModel.rotation.y = Math.PI * 1.5; // Atur rotasi menjadi menghadap ke bawah
     isRotatedBottom = true; // Setel ke true agar rotasi hanya terjadi sekali
   }
 }
-
 function loadVacumGLTF(){
   const loader = new GLTFLoader();
   loader.load(
@@ -687,9 +592,9 @@ function loadWirelessChargerGLTF() {
     '../hpdantempat/scene.gltf', // Path to your GLTF wireless charger file
     (gltf) => {
       wirelessChargerModel = gltf.scene;
-      wirelessChargerModel.position.set(-2.7, 1.7, -4.1); // Set to origin to check visibility
-      wirelessChargerModel.scale.set(10, 10, 10); // Set scale to 1 to check visibility
-      wirelessChargerModel.rotation.y = 0; // Reset rotation to check visibility
+      wirelessChargerModel.position.set(100, 1.7, -4.1); // Adjust as needed
+      wirelessChargerModel.scale.set(1, 1, 1); // Set scale to 1 or appropriate value
+      wirelessChargerModel.rotation.y = 0; // Adjust as needed
 
       // Ensure that the texture is correctly applied
       wirelessChargerModel.traverse((node) => {
@@ -718,6 +623,7 @@ function loadWirelessChargerGLTF() {
     }
   );
 }
+
 function loadDrawerGLTF() {
   const loader = new GLTFLoader();
   loader.load(
@@ -790,38 +696,6 @@ function loadWardrobeGLTF() {
 
       // Tambahkan model lemari ke dalam scene
       scene.add(wardrobeModel);
-    },
-    (xhr) => {
-      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-    },
-    (error) => {
-      console.error('An error happened while loading the GLTF model', error);
-    }
-  );
-}
-function loadPlateGLTF() {
-  const loader = new GLTFLoader();
-  loader.load(
-    './kue/scene.gltf', // Ganti dengan lokasi file GLTF piring Anda
-    (gltf) => {
-      const plateModel = gltf.scene;
-
-      // Sesuaikan posisi piring di dalam ruangan Anda
-      plateModel.position.set(-13, 2.3, 2.3);
-
-      // Sesuaikan skala model jika perlu
-      const scaleFactor = 0.1; // Faktor skala yang diinginkan
-      plateModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-      // Tambahkan properti receiveShadow dan castShadow jika diperlukan
-      plateModel.traverse((child) => {
-        if (child.isMesh) {
-          child.receiveShadow = true;
-          child.castShadow = true;
-        }
-      });
-
-      scene.add(plateModel); // Tambahkan model piring ke dalam scene
     },
     (xhr) => {
       console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
@@ -909,6 +783,11 @@ function loadLemariDapurGLTF() {
     }
   );
 }
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 function createWallNextToDoor() {
   const doorWidth = 2; // Lebar pintu GLTF
